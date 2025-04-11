@@ -1,0 +1,34 @@
+pipeline {
+    agent any
+
+    environment {
+        REPO_URL = 'https://github.com/shishir01chauhan/myapp-cicd.git'
+        IMAGE_NAME = 'my-app'
+        TAG = 'latest'
+    }
+
+    stages {
+        stage('Clone Repo') {
+            steps {
+                git branch: 'main', url: "${REPO_URL}"
+            }
+        }
+
+        stage('Build Docker Image') {
+            steps {
+                script {
+                    sh 'docker build -t $IMAGE_NAME:$TAG .'
+                }
+            }
+        }
+
+        // stage('Run Container (Optional)') {
+        //     steps {
+        //         script {
+        //             sh 'docker rm -f $IMAGE_NAME || true'
+        //             sh 'docker run -d --name $IMAGE_NAME -p 8080:3000 $IMAGE_NAME:$TAG'
+        //         }
+        //     }
+        // }
+    }
+  }
